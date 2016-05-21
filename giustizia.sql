@@ -1,9 +1,9 @@
--- phpMyAdmin SQL Dump
+﻿-- phpMyAdmin SQL Dump
 -- version 4.2.11
 -- http://www.phpmyadmin.net
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-02-2016 a las 04:24:02
+-- Tiempo de generación: 06-05-2016 a las 19:05:18
 -- Versión del servidor: 5.6.21
 -- Versión de PHP: 5.6.3
 
@@ -19,6 +19,22 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `giustizia`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_agenda`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_agenda` (
+  `agen_LugarCita` varchar(45) NOT NULL,
+  `agen_NumeroCita` int(11) NOT NULL,
+  `agen_Expediente` varchar(35) NOT NULL,
+  `agen_Departamento` int(11) NOT NULL,
+  `agen_Municipio` int(11) NOT NULL,
+  `agen_FechaCita` datetime NOT NULL,
+  `agen_Observaciones` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -136,6 +152,17 @@ INSERT INTO `tbl_departamentos` (`depa_Id`, `depa_Codigo`, `depa_Departamento`, 
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_especialidades`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_especialidades` (
+`espe_Id` int(11) NOT NULL,
+  `espe_Descripcion` varchar(25) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_estados`
 --
 
@@ -174,6 +201,27 @@ INSERT INTO `tbl_estratos` (`estr_Id`, `estr_Estrato`) VALUES
 (4, 'CUATRO'),
 (5, 'CINCO'),
 (6, 'SEIS');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_expedientes`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_expedientes` (
+  `exp_NumeroExpediente` varchar(35) NOT NULL,
+  `exp_Id` int(11) NOT NULL,
+  `exp_DocumentoConsultorio` int(11) NOT NULL,
+  `exp_FechaExpediente` date NOT NULL,
+  `exp_Consulta` varchar(25) NOT NULL,
+  `exp_EstadoExpediente` varchar(10) NOT NULL,
+  `exp_Especialidad` int(11) NOT NULL,
+  `exp_Abogado` int(11) NOT NULL,
+  `exp_TipoJuzgado` int(11) NOT NULL,
+  `exp_Soportes` text NOT NULL,
+  `exp_ObservacionExpedientes` longtext NOT NULL,
+  `exp_ClasificacionProceso` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -314,6 +362,45 @@ INSERT INTO `tbl_festivos` (`Fecha`, `Dia`, `Mes`, `Anno`, `Celebracion`) VALUES
 ('2020-12-25', 25, 12, 2020, 'Día de Navidad'),
 ('2021-01-01', 1, 1, 2021, 'Año Nuevo'),
 ('2021-07-20', 20, 7, 2021, 'Grito de Independencia');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_gestion`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_gestion` (
+  `gest_Id` int(11) NOT NULL,
+  `gest_Expediente` varchar(35) NOT NULL,
+  `gest_TipoGestion` int(11) NOT NULL,
+  `gest_FechaInicio` date NOT NULL,
+  `gest_DiasDuracion` int(11) NOT NULL,
+  `gest_FechaVen` date NOT NULL,
+  `gest_Observacion` longtext NOT NULL,
+  `gest_Terminado` tinyint(1) NOT NULL,
+  `gest_FechaIngreso` date NOT NULL,
+  `gest_FechaTerminacion` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tbl_juzgados`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_juzgados` (
+  `juz_Id` int(11) NOT NULL,
+  `juz_TipoJuzgado` int(11) NOT NULL,
+  `juz_Juzgado` varchar(80) NOT NULL,
+  `juz_Departamento` int(11) NOT NULL,
+  `juz_Municipio` int(11) NOT NULL,
+  `juz_Circuito` varchar(200) NOT NULL,
+  `juz_Distrito` varchar(200) NOT NULL,
+  `juz_Direccion` varchar(100) NOT NULL,
+  `juz_Telefono` varchar(80) NOT NULL,
+  `juz_Contacto` varchar(80) NOT NULL,
+  `juz_HorarioAtencion` varchar(80) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1636,6 +1723,17 @@ INSERT INTO `tbl_tipodocumento` (`Id`, `Descripcion`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tbl_tipojuzgado`
+--
+
+CREATE TABLE IF NOT EXISTS `tbl_tipojuzgado` (
+  `tipjuz_Id` int(11) NOT NULL,
+  `tipjuz_TipoJuzgado` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `tbl_tipousuario`
 --
 
@@ -1717,6 +1815,12 @@ ALTER TABLE `tbl_departamentos`
  ADD PRIMARY KEY (`depa_Id`);
 
 --
+-- Indices de la tabla `tbl_especialidades`
+--
+ALTER TABLE `tbl_especialidades`
+ ADD PRIMARY KEY (`espe_Id`);
+
+--
 -- Indices de la tabla `tbl_estados`
 --
 ALTER TABLE `tbl_estados`
@@ -1729,10 +1833,28 @@ ALTER TABLE `tbl_estratos`
  ADD PRIMARY KEY (`estr_Id`);
 
 --
+-- Indices de la tabla `tbl_expedientes`
+--
+ALTER TABLE `tbl_expedientes`
+ ADD PRIMARY KEY (`exp_NumeroExpediente`), ADD KEY `exp_DocumentoConsultorio` (`exp_DocumentoConsultorio`), ADD KEY `exp_Consulta` (`exp_Consulta`);
+
+--
 -- Indices de la tabla `tbl_festivos`
 --
 ALTER TABLE `tbl_festivos`
  ADD PRIMARY KEY (`Fecha`);
+
+--
+-- Indices de la tabla `tbl_gestion`
+--
+ALTER TABLE `tbl_gestion`
+ ADD KEY `gest_Expediente` (`gest_Expediente`), ADD KEY `gest_TipoGestion` (`gest_TipoGestion`);
+
+--
+-- Indices de la tabla `tbl_juzgados`
+--
+ALTER TABLE `tbl_juzgados`
+ ADD KEY `juz_TipoJuzgado` (`juz_TipoJuzgado`), ADD KEY `juz_Departamento` (`juz_Departamento`), ADD KEY `juz_Municipio` (`juz_Municipio`);
 
 --
 -- Indices de la tabla `tbl_municipios`
@@ -1759,6 +1881,12 @@ ALTER TABLE `tbl_tipodocumento`
  ADD PRIMARY KEY (`Id`);
 
 --
+-- Indices de la tabla `tbl_tipojuzgado`
+--
+ALTER TABLE `tbl_tipojuzgado`
+ ADD PRIMARY KEY (`tipjuz_Id`);
+
+--
 -- Indices de la tabla `tbl_tipousuario`
 --
 ALTER TABLE `tbl_tipousuario`
@@ -1779,6 +1907,11 @@ ALTER TABLE `tbl_usuarios`
 --
 ALTER TABLE `tbl_casificacionproceso`
 MODIFY `clapro_Id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=18;
+--
+-- AUTO_INCREMENT de la tabla `tbl_especialidades`
+--
+ALTER TABLE `tbl_especialidades`
+MODIFY `espe_Id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT de la tabla `tbl_estados`
 --
